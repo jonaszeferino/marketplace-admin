@@ -1,9 +1,9 @@
 import mysql from 'mysql2/promise';
 
 const pool = mysql.createPool({
-  host: 'db4free.net',
-  user: 'admin_mkt',
-  password: 'W@terfall1909',
+  host: process.env.NEXT_PUBLIC_MYSQL_HOST,
+  user: process.env.NEXT_PUBLIC_MYSQL_USER,
+  password: process.env.NEXT_PUBLIC_MYSQL_KEY,
   database: 'mkt_app',
 });
 
