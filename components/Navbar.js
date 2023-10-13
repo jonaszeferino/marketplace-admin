@@ -1,6 +1,13 @@
+import React, { useState } from "react";
 import Link from "next/link";
 
-export default function Navbar() {
+const Navbar = () => {
+  const [showSubMenu, setShowSubMenu] = useState(false);
+
+  const toggleSubMenu = () => {
+    setShowSubMenu(!showSubMenu);
+  };
+
   return (
     <nav className="bg-blue-600 p-10">
       <div className="container mx-auto">
@@ -8,11 +15,32 @@ export default function Navbar() {
           <li>
             <Link href="/">Pedidos</Link>
           </li>
-          <li>
-            <Link href="/products">Catálogo</Link>
+          <li
+            onMouseEnter={toggleSubMenu}
+            onMouseLeave={toggleSubMenu}
+            className="relative"
+          >
+            <span className="cursor-pointer">
+              Catálogo
+            </span>
+            {showSubMenu && (
+              <ul className="absolute bg-blue-600 text-white p-2 space-y-2 top-full left-0 w-48">
+                <li className="bg-blue-700">
+                  <Link href="/product-definitions">Definição de Produtos</Link>
+                </li>
+                <li className="bg-blue-800">
+                  <Link href="/products">Produtos</Link>
+                </li>
+                <li className="bg-blue-700">
+                  <Link href="/products-configs">Configs</Link>
+                </li>
+              </ul>
+            )}
           </li>
         </ul>
       </div>
     </nav>
   );
-}
+};
+
+export default Navbar;

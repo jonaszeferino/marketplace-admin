@@ -20,7 +20,6 @@ async function fetchProducts() {
     const connection = await pool.getConnection();
 
     try {
-      // Primeira consulta
       const query1 = `
         SELECT pd.name, pd.description, pd.label as definition_label, pd.product_definition_id
         FROM product_definitions pd
@@ -28,24 +27,18 @@ async function fetchProducts() {
       `;
       const [rows1, fields1] = await connection.query(query1);
 
-      // Segunda consulta
       const query2 = `
         SELECT pdv.type, pa.label, pa.key_attribute, pdv.product_definition_id
         FROM product_definition_values pdv
         INNER JOIN product_attributes pa ON pa.product_attribute_id = pdv.product_attribute_id
-        
-      `;
+        `;
       const [rows2, fields2] = await connection.query(query2);
-
-      // Processar e mesclar os resultados, se necessário
-
-      // Por fim, libere a conexão
       connection.release();
 
       return { definitions: rows1, attributes: rows2 };
     } catch (error) {
       console.error("Erro na segunda consulta: ", error);
-      // Por fim, libere a conexão em caso de erro
+      
       connection.release();
       throw error;
     }
