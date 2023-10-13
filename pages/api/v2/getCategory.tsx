@@ -17,10 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 async function fetchProducts() {
   try {
-    const query = `
-      SELECT * from category
-      
-    `;
+    const query = `SELECT * from category`;
     const [rows, fields] = await pool.query(query);
     return rows;
   } catch (error) {
