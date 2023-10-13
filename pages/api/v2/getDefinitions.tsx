@@ -17,36 +17,41 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 async function fetchProducts() {
   try {
-    const query = 
-    `SELECT pd.name , pd.description , pd.label as definition_label, pdv.type, pa.label, pa.key_attribute  
-    from product_definitions pd
-    INNER JOIN  product_definition_values pdv
-    on pd.product_definition_id = pdv.product_definition_id
-    INNER JOIN product_attributes pa on pa.product_attribute_id = pdv.product_attribute_id`;
+    const connection = await pool.getConnection();
 
-    const [rows, fields] = await pool.query(query);
+    try {
+      // Primeira consulta
+      const query1 = `
+        SELECT pd.name, pd.description, pd.label as definition_label, pd.product_definition_id
+        FROM product_definitions pd
+        
+      `;
+      const [rows1, fields1] = await connection.query(query1);
 
-    if (rows.length > 0) {
-      const { definition_label, name, description, ...rest } = rows[0];
+      // Segunda consulta
+      const query2 = `
+        SELECT pdv.type, pa.label, pa.key_attribute, pdv.product_definition_id
+        FROM product_definition_values pdv
+        INNER JOIN product_attributes pa ON pa.product_attribute_id = pdv.product_attribute_id
+        
+      `;
+      const [rows2, fields2] = await connection.query(query2);
 
-      const result = {
-        definition_label,
-        name,
-        description,
-        data: rows.map((row) => ({
-          ...rest,
-          type: row.type,
-          label: row.label,
-          key_attribute: row.key_attribute,
-        })),
-      };
+      // Processar e mesclar os resultados, se necessário
 
-      return result;
+      // Por fim, libere a conexão
+      connection.release();
+
+      return { definitions: rows1, attributes: rows2 };
+    } catch (error) {
+      console.error("Erro na segunda consulta: ", error);
+      // Por fim, libere a conexão em caso de erro
+      connection.release();
+      throw error;
     }
-
-    return {};
   } catch (error) {
-    console.error("Erro ao consultar as tabelas: ", error);
+    console.error("Erro ao obter a conexão: ", error);
     throw error;
   }
 }
+
