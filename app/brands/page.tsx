@@ -2,116 +2,142 @@
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { error } from "console";
-import React, { useState, useEffect } from "react";
+import React, { useState  } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 
-interface Definition {
-  name: string;
-  description: string;
-  definition_label: string;
-  product_definition_id: number;
-}
-
-interface Attribute {
-  type: string;
+type FormData = {
   label: string;
-  key_attribute: string;
-  product_definition_id: number;
-}
+  name: string;
+  logo: string;
+};
 
-interface Data {
-  definitions: Definition[];
-  attributes: Attribute[];
-}
+const MyForm: React.FC = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
+  
+  const [message, setMessage] = useState<string>("");
+  const [isDisable, setIsDisable] = useState<Boolean>(false);
 
-const ProductTable: React.FC = () => {
-  const [data, setData] = useState<Data>({ definitions: [], attributes: [] });
+  console.log("chamou");
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    try {
+      const response = await fetch("/api/v2/postBrand", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("Chamou");
-        const response = await fetch("/api/v2/getDefinitions", {
-          method: "POST",
-        });
-        console.log(response);
-        if (!response.ok) {
-          throw new Error("Erro na solicitação");
-          console.log(response);
-        }
-
-        const jsonData: Data = await response.json();
-        setData(jsonData);
-        console.log("veio algo");
-      } catch (error) {
-        console.error(error);
+      if (response.ok) {
+        console.log("Inserção bem-sucedida");
+        setMessage("Cadastro Criado");
+        
+        setIsDisable(true);
+        console.log(`Depois de setIsDisable${isDisable}`);
+      } else {
+        console.error("Erro na inserção");
+        setIsDisable(true);
       }
-    };
-
-    fetchData();
-  }, []);
+    } catch (error) {
+      console.error("Erro na solicitação:", error);
+      setIsDisable(true);
+      console.log(isDisable);
+    }
+  };
 
   return (
     <>
       <Navbar />
-      <div className="w-full">
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th className="text-left py-2 px-3">Tipo de Variação</th>
-              <th className="text-left py-2 px-3">Opção</th>
-              <th className="text-left py-2 px-3">Tipo de Atributo</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.definitions.map((definition, index) => {
-              return data.attributes
-                .filter(
-                  (attribute) =>
-                    attribute.product_definition_id ===
-                    definition.product_definition_id
-                )
-                .map((attribute, innerIndex) => (
-                  <tr key={attribute.label} className="hover:bg-gray-100">
-                    {index === 0 && innerIndex === 0 && (
-                      <td
-                        className="py-2 px-3"
-                        rowSpan={data.attributes.length}
-                      >
-                        {definition.definition_label}
-                      </td>
-                    )}
-                    {index === 0 && innerIndex === 0 && (
-                      <td
-                        className="py-2 px-3"
-                        rowSpan={data.attributes.length}
-                      >
-                        {definition.description}
-                      </td>
-                    )}
-                    <td className="py-2 px-3">
-                      {attribute.type === "option" ? "Opção" : null}
-                    </td>
-                    <td className="py-2 px-3">{attribute.label}</td>
-                    <td className="py-2 px-3">
-                      {attribute.key_attribute === "size"
-                        ? "Tamanho"
-                        : attribute.key_attribute === "material"
-                        ? "Tecido"
-                        : attribute.key_attribute === "color"
-                        ? "Cor"
-                        : null}
-                    </td>
-                  </tr>
-                ));
-            })}
-          </tbody>
-        </table>
-      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="max-w-sm mx-auto">
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="label"
+          >
+            Label
+          </label>
+          <input
+            {...register("label", { required: true })}
+            type="text"
+            id="label"
+            name="label"
+            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+              errors.label ? "border-red-500" : ""
+            }`}
+          />
+          {errors.label && (
+            <p className="text-red-500 text-xs italic">
+              Este campo é obrigatório.
+            </p>
+          )}
+        </div>
 
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="name"
+          >
+            Name
+          </label>
+          <input
+            {...register("name", { required: true })}
+            type="text"
+            id="name"
+            name="name"
+            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+              errors.name ? "border-red-500" : ""
+            }`}
+          />
+          {errors.name && (
+            <p className="text-red-500 text-xs italic">
+              Este campo é obrigatório.
+            </p>
+          )}
+        </div>
+
+        <div className="mb-6">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="logo"
+          >
+            Logo
+          </label>
+          <input
+            {...register("logo", { required: true })}
+            type="text"
+            id="logo"
+            name="logo"
+            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+              errors.logo ? "border-red-500" : ""
+            }`}
+          />
+          {errors.logo && (
+            <p className="text-red-500 text-xs italic">
+              Este campo é obrigatório.
+            </p>
+          )}
+        </div>
+
+        <div className="mb-6 text-center">
+          <button
+            disabled={isDisable}
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Enviar
+          </button>
+        </div>
+        <span>{message}</span>
+        <br />
+        <span>Teste:{isDisable}</span>
+      </form>
       <Footer />
     </>
   );
 };
 
-export default ProductTable;
+export default MyForm;
