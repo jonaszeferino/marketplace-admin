@@ -25,13 +25,16 @@ const Navbar = () => {
             </span>
             {showSubMenu && (
               <ul className="absolute bg-blue-600 text-white p-2 space-y-2 top-full left-0 w-48">
-                <li className="bg-blue-700">
+                <li className="bg-blue-710">
                   <Link href="/product-definitions">Definição de Produtos</Link>
                 </li>
-                <li className="bg-blue-800">
+                <li className="bg-blue-720">
+                  <Link href="/categorias">Categorias</Link>
+                </li>
+                <li className="bg-blue-710">
                   <Link href="/products">Produtos</Link>
                 </li>
-                <li className="bg-blue-700">
+                <li className="bg-blue-720">
                   <Link href="/products-configs">Configs</Link>
                 </li>
               </ul>
