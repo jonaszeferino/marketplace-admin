@@ -21,9 +21,6 @@ const Form = () => {
       <div className="flex">
         {/* Sidebar */}
         <div className="bg-gray-200 w-64 h-screen fixed top-25 left-0 overflow-y-auto">
-          <div className="p-4">
-            <h2 className="text-2xl font-semibold">Menu</h2>
-          </div>
           <ul className="space-y-4">
             <li className="p-4 hover:bg-gray-300">
               <a href="/produtos">Produto</a>
@@ -42,7 +39,6 @@ const Form = () => {
 
         {/* Conteúdo principal */}
         <div className="ml-64 p-4 custom-container-width w-1000">
-
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label htmlFor="nome" className="block text-black font-semibold">
@@ -108,7 +104,7 @@ const Form = () => {
           </form>
         </div>
       </div>
-      <Footer/>
+      
     </>
   );
 };

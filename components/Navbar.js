@@ -31,6 +31,9 @@ const Navbar = () => {
                 <li className="bg-blue-720">
                   <Link href="/categorias">Categorias</Link>
                 </li>
+                <li className="bg-blue-720">
+                  <Link href="/brands">Marcas</Link>
+                </li>
                 <li className="bg-blue-710">
                   <Link href="/products">Produtos</Link>
                 </li>

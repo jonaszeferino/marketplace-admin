@@ -86,7 +86,7 @@ const ProductTable: React.FC = () => {
         </tbody>
       </table>
     </div>
-    <Footer/>
+    
     </>
   );
 };

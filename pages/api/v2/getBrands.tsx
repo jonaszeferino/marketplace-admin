@@ -4,6 +4,7 @@ import pool from "../../../utils/mySqlConnection";
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "GET") {
     try {
+      console.log('chamou o metodo dentro da api')
       const products = await fetchProducts();
       res.status(200).json(products);
     } catch (error) {
@@ -17,11 +18,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 async function fetchProducts() {
   try {
-    const query = `select * from product_definitions p.produ`;
+    const query = `select * from brands`;
     const [rows, fields] = await pool.query(query);
     return rows;
   } catch (error) {
     console.error("Erro ao consultar as tabelas: ", error);
+    console.log(error)
     throw error;
   }
 }

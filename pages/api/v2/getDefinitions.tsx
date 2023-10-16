@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import pool from "../../../utils/mySqlConnection";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === "POST") {
+  if (req.method === "GET") {
     try {
       const products = await fetchProducts();
       res.status(200).json(products);

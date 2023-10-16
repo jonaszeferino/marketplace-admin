@@ -2,9 +2,8 @@
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import ReactDOM from "react-dom";
 
 type FormData = {
   label: string;
@@ -23,6 +22,7 @@ const MyForm: React.FC = () => {
   const [message, setMessage] = useState<string>("");
   const [isDisable, setIsDisable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [brands, setBrands] = useState([]);
 
   const onSubmit = async (data: FormData, e: React.BaseSyntheticEvent) => {
     console.log("chamou");
@@ -40,8 +40,8 @@ const MyForm: React.FC = () => {
       if (response.ok) {
         console.log("Inserção bem-sucedida");
         setMessage("Cadastro Criado");
-        setIsDisable(true);
         setIsLoading(false);
+        setIsDisable(true);
       } else {
         console.error("Erro na inserção");
         setIsDisable(true);
@@ -49,11 +49,31 @@ const MyForm: React.FC = () => {
       }
     } catch (error) {
       console.error("Erro na solicitação:", error);
-      setIsDisable(true);
+
       console.log(`Depois de setIsDisable${isDisable}`);
       setIsLoading(false);
     }
   };
+
+  const fetchBrands = async () => {
+    try {
+      console.log('Chamou get')
+      const response = await fetch("/api/v2/getBrands");
+      if (response.ok) {
+        const data = await response.json();
+        setBrands(data);
+        console.log('veio')
+      } else {
+        console.error("Erro na solicitação GET de marcas");
+      }
+    } catch (error) {
+      console.error("Erro na solicitação GET de marcas:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBrands();
+  }, []);
 
   return (
     <>
@@ -128,7 +148,24 @@ const MyForm: React.FC = () => {
         </button>
       </form>
 
-      <Footer />
+      <br/>
+      <br/>
+      <div className="mb-6 border-b border-gray-300"></div>
+      
+      <>
+        <h1>Marcas Cadastradas</h1>
+
+        <div>
+          <h2>Lista de Marcas:</h2>
+          <ul>
+            {brands.map((brand) => (
+              <li key={brand.brand_id}>{brand.name}</li>
+            ))}
+          </ul>
+        </div>
+      </>
+
+      
     </>
   );
 };
