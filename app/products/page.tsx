@@ -108,6 +108,7 @@ const Form = () => {
           </form>
         </div>
       </div>
+      <Footer/>
     </>
   );
 };
