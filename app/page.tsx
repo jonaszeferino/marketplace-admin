@@ -56,7 +56,7 @@ export default function MovieList() {
           </div>
         ))}
       </div>
-      <Footer />
+      
     </div>
   );
 }

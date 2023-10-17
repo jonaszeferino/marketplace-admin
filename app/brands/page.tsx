@@ -1,9 +1,8 @@
 "use client";
 
 import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm, useFormState } from "react-hook-form";
 
 type FormData = {
   label: string;
@@ -19,15 +18,21 @@ const MyForm: React.FC = () => {
     formState: { errors },
   } = useForm<FormData>();
 
+  type Brand = {
+    brand_id: number;
+    name: string;
+    label: string;
+  };
+
+  const methods = useForm<FormData>();
   const [message, setMessage] = useState<string>("");
   const [isDisable, setIsDisable] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { isSubmitting } = useFormState({ control: methods.control });
   const [brands, setBrands] = useState([]);
 
-  const onSubmit = async (data: FormData, e: React.BaseSyntheticEvent) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     console.log("chamou");
 
-    setIsLoading(true);
     try {
       const response = await fetch("/api/v2/postBrand", {
         method: "POST",
@@ -36,33 +41,25 @@ const MyForm: React.FC = () => {
           "Content-Type": "application/json",
         },
       });
-
       if (response.ok) {
         console.log("Inserção bem-sucedida");
         setMessage("Cadastro Criado");
-        setIsLoading(false);
-        setIsDisable(true);
       } else {
         console.error("Erro na inserção");
-        setIsDisable(true);
-        setIsLoading(false);
       }
     } catch (error) {
       console.error("Erro na solicitação:", error);
-
-      console.log(`Depois de setIsDisable${isDisable}`);
-      setIsLoading(false);
     }
   };
 
   const fetchBrands = async () => {
     try {
-      console.log('Chamou get')
+      console.log("Chamou get");
       const response = await fetch("/api/v2/getBrands");
       if (response.ok) {
         const data = await response.json();
         setBrands(data);
-        console.log('veio')
+        console.log("veio");
       } else {
         console.error("Erro na solicitação GET de marcas");
       }
@@ -78,8 +75,17 @@ const MyForm: React.FC = () => {
   return (
     <>
       <Navbar />
-      {isLoading ? <span>Salvando...</span> : null}
-      <form onSubmit={handleSubmit(onSubmit)} className="max-w-sm mx-auto">
+      {isSubmitting && (
+        <div className="text-center mb-4">
+          <div className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+          <p className="text-blue-500">Enviando...</p>
+        </div>
+      )}
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="max-w-sm mx-auto mt-10"
+      >
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -110,7 +116,6 @@ const MyForm: React.FC = () => {
             className="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring focus:border-blue-300"
           />
         </div>
-
         <div className="mb-6">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -124,12 +129,11 @@ const MyForm: React.FC = () => {
             className="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring focus:border-blue-300"
           />
         </div>
-
         <div className="mb-6 text-center">
           {!isDisable ? (
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               Enviar
             </button>
@@ -137,35 +141,41 @@ const MyForm: React.FC = () => {
         </div>
         <span>{message}</span>
         <br />
-
         <button
-          style={{ display: "block", marginTop: 20 }}
+          style={{ display: "block", marginTop: 2 }}
           type="reset"
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          onClick={() => (reset(), setIsDisable(false), setMessage(""))}
+          className="bg-red-500 hover-bg-red-700 text-white font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline"
+          onClick={() => (reset(), setMessage(""))}
         >
           Novo{" "}
         </button>
       </form>
 
-      <br/>
-      <br/>
+      <br />
+      <br />
       <div className="mb-6 border-b border-gray-300"></div>
-      
-      <>
-        <h1>Marcas Cadastradas</h1>
 
-        <div>
-          <h2>Lista de Marcas:</h2>
-          <ul>
-            {brands.map((brand) => (
-              <li key={brand.brand_id}>{brand.name}</li>
-            ))}
-          </ul>
+      <>
+        <div className="mx-6 mb-8">
+          <h2 className="text-2xl font-bold mb-18 mx-auto">Marcas</h2>
+          <table className="min-w-full">
+            <thead>
+              <tr>
+                <th className="text-left">Marca</th>
+                <th className="text-left">Label</th>
+              </tr>
+            </thead>
+            <tbody>
+              {brands.map((brand: Brand) => (
+                <tr key={brand.brand_id}>
+                  <td className="text-blue-500">{brand.name}</td>
+                  <td className="text-gray-700">{brand.label}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </>
-
-      
     </>
   );
 };
