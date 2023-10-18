@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 
 const Form = () => {
   const [nome, setNome] = useState("");
@@ -11,28 +10,51 @@ const Form = () => {
   const [preco, setPreco] = useState("");
   const [sku, setSku] = useState("");
 
+  //novo estilo via objeto num estado apenas//
+  const [product, setProduct] = useState({
+    name: "",
+    sku: "",
+    ean: "",
+    description: "",
+    price: 0,
+    promo_price: 0,
+    shipped_weight: 0,
+    shipped_width: 0,
+    shipped_length: 0,
+    shipped_height: 0,
+  });
+
+  const handleFieldChange = (e) => {
+    const fieldName = e.target.name;
+    const fieldValue = e.target.value;
+
+    setProduct({
+      ...product,
+      [fieldName]: fieldValue,
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ nome, ean, descricao, preco });
+    console.log(product);
   };
+  //----ate aqui o acaba o novo-----//
 
   const [openCreate, setOpenCreate] = useState(false);
 
   const handleOpen = () => {
     setOpenCreate(!openCreate);
   };
+  const [selectedOption, setSelectedOption] = useState<string>("");
 
-  // Seleciona a Definição
-  const [selectedOption, setSelectedOption] = useState("");
-  const handleOptionChange = (event) => {
+  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedOption(event.target.value);
   };
 
-  // Seleciona a opcoes no sidebar
   const [selectedOptionWithoutVariation, setSelectedOptionWithoutVariation] =
     useState("produto");
 
-  const handleOptionChangeWithoutVariation = (option) => {
+  const handleOptionChangeWithoutVariation = (option: string) => {
     setSelectedOptionWithoutVariation(option);
   };
 
@@ -54,16 +76,17 @@ const Form = () => {
           <h2>Selecione uma opção:</h2>
           <select value={selectedOption} onChange={handleOptionChange}>
             <option value="">Escolha a opção abaixo</option>
-            <option value="sem">Sem variacao</option>
-            <option value="Roupa Adulta">Roupa Adulta</option>
-            <option value="Roupa Infantil">Roupa Infantil</option>
+            <option value="7">Sem variacao</option>
+            <option value="8">Roupa Adulta</option>
+            <option value="9">Roupa Infantil</option>
           </select>
 
           <p>Você selecionou: {selectedOption}</p>
         </div>
       ) : null}
 
-      {selectedOption === "sem" ? (
+      {/* Without Variation */}
+      {selectedOption === "7" ? (
         <div className="flex">
           <div className="bg-gray-200 w-64 left-0">
             <ul className="space-y-4">
@@ -136,17 +159,17 @@ const Form = () => {
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                   <label
-                    htmlFor="nome"
+                    htmlFor="name"
                     className="block text-black font-semibold"
                   >
                     Nome:
                   </label>
                   <input
                     type="text"
-                    id="nome"
-                    name="nome"
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
+                    id="name"
+                    name="name"
+                    value={product.name}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
@@ -160,10 +183,10 @@ const Form = () => {
                   </label>
                   <input
                     type="text"
-                    id="nome"
-                    name="nome"
-                    value={nome}
-                    onChange={(e) => setSku(e.target.value)}
+                    id="sku"
+                    name="sku"
+                    value={product.sku}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
@@ -179,8 +202,8 @@ const Form = () => {
                     type="text"
                     id="ean"
                     name="ean"
-                    value={ean}
-                    onChange={(e) => setEan(e.target.value)}
+                    value={product.ean}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
@@ -191,48 +214,49 @@ const Form = () => {
                   >
                     Descrição:
                   </label>
-                  <textarea
-                    id="descricao"
-                    name="descricao"
-                    value={descricao}
-                    onChange={(e) => setDescricao(e.target.value)}
+                  <input
+                    type="text"
+                    id="description"
+                    name="description"
+                    value={product.description}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
                 <div className="mb-4">
                   <label
-                    htmlFor="preco"
+                    htmlFor="price"
                     className="block text-black font-semibold"
                   >
                     Preço de:
                   </label>
                   <input
                     type="number"
-                    id="preco"
-                    name="preco"
-                    value={preco}
-                    onChange={(e) => setPreco(e.target.value)}
+                    id="price"
+                    name="price"
+                    value={product.price}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
 
                 <div className="mb-4">
                   <label
-                    htmlFor="preco"
+                    htmlFor="promo_price"
                     className="block text-black font-semibold"
                   >
                     Preço Por:
                   </label>
                   <input
                     type="number"
-                    id="precoPor"
-                    name="precoPor"
-                    value={preco}
-                    onChange={(e) => setPreco(e.target.value)}
+                    id="promo_price"
+                    name="promo_price"
+                    value={product.promo_price}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
-         
+
                 <button
                   type="submit"
                   className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700"
@@ -245,71 +269,74 @@ const Form = () => {
 
           {selectedOptionWithoutVariation === "dimensoes" ? (
             <div className="ml-4 p-4 custom-container-width w-1000">
+              <h1>
+                <strong>Dados Para Envio</strong>
+              </h1>
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                   <label
-                    htmlFor="nome"
+                    htmlFor="shipped_weight"
                     className="block text-black font-semibold"
                   >
                     Peso:
                   </label>
                   <input
                     type="number"
-                    id="nome"
-                    name="nome"
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
+                    id="shipped_weight"
+                    name="shipped_weight"
+                    value={product.shipped_weight}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
 
                 <div className="mb-4">
                   <label
-                    htmlFor="ean"
+                    htmlFor="shipped_width"
                     className="block text-black font-semibold"
                   >
                     Largura:
                   </label>
                   <input
                     type="number"
-                    id="ean"
-                    name="ean"
-                    value={ean}
-                    onChange={(e) => setEan(e.target.value)}
+                    id="shipped_width"
+                    name="shipped_width"
+                    value={product.shipped_width}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
 
                 <div className="mb-4">
                   <label
-                    htmlFor="preco"
+                    htmlFor="shipped_height"
                     className="block text-black font-semibold"
                   >
                     Altura:
                   </label>
                   <input
                     type="number"
-                    id="preco"
-                    name="preco"
-                    value={preco}
-                    onChange={(e) => setPreco(e.target.value)}
+                    id="shipped_height"
+                    name="shipped_height"
+                    value={product.shipped_height}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
 
                 <div className="mb-4">
                   <label
-                    htmlFor="preco"
+                    htmlFor="shipped_length"
                     className="block text-black font-semibold"
                   >
                     Comprimento:
                   </label>
                   <input
                     type="number"
-                    id="preco"
-                    name="preco"
-                    value={preco}
-                    onChange={(e) => setPreco(e.target.value)}
+                    id="shipped_length"
+                    name="shipped_length"
+                    value={product.shipped_length}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
@@ -342,7 +369,6 @@ const Form = () => {
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
-
                 <div className="mb-4">
                   <label
                     htmlFor="ean"
@@ -407,7 +433,7 @@ const Form = () => {
                     onChange={(e) => setPreco(e.target.value)}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
-                                   <input
+                  <input
                     type="number"
                     id="preco"
                     name="preco"
@@ -415,7 +441,7 @@ const Form = () => {
                     onChange={(e) => setPreco(e.target.value)}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
-                                   <input
+                  <input
                     type="number"
                     id="preco"
                     name="preco"
@@ -424,9 +450,6 @@ const Form = () => {
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
-                
-
-
                 <div className="mb-4">
                   <label
                     htmlFor="preco"
@@ -443,7 +466,6 @@ const Form = () => {
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
-
 
                 <button
                   type="submit"
@@ -463,7 +485,7 @@ const Form = () => {
                     htmlFor="nome"
                     className="block text-black font-semibold"
                   >
-                    Atributo 1{" "}
+                    Cor
                   </label>
                   <input
                     type="text"
@@ -480,7 +502,7 @@ const Form = () => {
                     htmlFor="ean"
                     className="block text-black font-semibold"
                   >
-                    Atributo 2
+                    Material do Produto
                   </label>
                   <input
                     type="text"
@@ -496,7 +518,7 @@ const Form = () => {
                     htmlFor="descricao"
                     className="block text-black font-semibold"
                   >
-                    Atributo 3{" "}
+                    Garantia de Fábrica
                   </label>
                   <textarea
                     id="descricao"
@@ -511,7 +533,7 @@ const Form = () => {
                     htmlFor="preco"
                     className="block text-black font-semibold"
                   >
-                    Atributo 4{" "}
+                    Altura do Produto
                   </label>
                   <input
                     type="number"
@@ -522,6 +544,58 @@ const Form = () => {
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="preco"
+                    className="block text-black font-semibold"
+                  >
+                    Largura do Produto
+                  </label>
+                  <input
+                    type="number"
+                    id="preco"
+                    name="preco"
+                    value={preco}
+                    onChange={(e) => setPreco(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="preco"
+                    className="block text-black font-semibold"
+                  >
+                    Profundidade do Produto
+                  </label>
+                  <input
+                    type="number"
+                    id="preco"
+                    name="preco"
+                    value={preco}
+                    onChange={(e) => setPreco(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="preco"
+                    className="block text-black font-semibold"
+                  >
+                    Peso do Produto
+                  </label>
+                  <input
+                    type="number"
+                    id="preco"
+                    name="preco"
+                    value={preco}
+                    onChange={(e) => setPreco(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
                 <button
                   type="submit"
                   className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700"
