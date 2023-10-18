@@ -23,7 +23,7 @@ const Form = () => {
   };
 
   // Seleciona a Definição
-  const [selectedOption, setSelectedOption] = useState("sem");
+  const [selectedOption, setSelectedOption] = useState("");
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
@@ -53,6 +53,7 @@ const Form = () => {
         <div>
           <h2>Selecione uma opção:</h2>
           <select value={selectedOption} onChange={handleOptionChange}>
+            <option value="">Escolha a opção abaixo</option>
             <option value="sem">Sem variacao</option>
             <option value="Roupa Adulta">Roupa Adulta</option>
             <option value="Roupa Infantil">Roupa Infantil</option>
@@ -203,7 +204,7 @@ const Form = () => {
                     htmlFor="preco"
                     className="block text-black font-semibold"
                   >
-                    Preço:
+                    Preço de:
                   </label>
                   <input
                     type="number"
@@ -214,6 +215,24 @@ const Form = () => {
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="preco"
+                    className="block text-black font-semibold"
+                  >
+                    Preço Por:
+                  </label>
+                  <input
+                    type="number"
+                    id="precoPor"
+                    name="precoPor"
+                    value={preco}
+                    onChange={(e) => setPreco(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+         
                 <button
                   type="submit"
                   className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700"
@@ -277,7 +296,6 @@ const Form = () => {
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
-       
 
                 <div className="mb-4">
                   <label
@@ -356,6 +374,59 @@ const Form = () => {
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="preco"
+                    className="block text-black font-semibold"
+                  >
+                    Categoria Principal:
+                  </label>
+                  <input
+                    type="number"
+                    id="preco"
+                    name="preco"
+                    value={preco}
+                    onChange={(e) => setPreco(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="preco"
+                    className="block text-black font-semibold"
+                  >
+                    Sub-Categorias:
+                  </label>
+                  <input
+                    type="number"
+                    id="preco"
+                    name="preco"
+                    value={preco}
+                    onChange={(e) => setPreco(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                  />
+                                   <input
+                    type="number"
+                    id="preco"
+                    name="preco"
+                    value={preco}
+                    onChange={(e) => setPreco(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                  />
+                                   <input
+                    type="number"
+                    id="preco"
+                    name="preco"
+                    value={preco}
+                    onChange={(e) => setPreco(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                
+
+
                 <div className="mb-4">
                   <label
                     htmlFor="preco"
@@ -372,6 +443,8 @@ const Form = () => {
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
+
+
                 <button
                   type="submit"
                   className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700"
