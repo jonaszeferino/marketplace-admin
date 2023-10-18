@@ -29,7 +29,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       } = req.body;
 
       const errorMessages = [];
-
       if (product_definition_id != 7) {
         errorMessages.push("wrong definition - use getDefinition method");
       }
@@ -41,6 +40,24 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       }
       if (price === null) {
         errorMessages.push("price is required");
+      }
+      if (price < 0.1) {
+        errorMessages.push("price cannot be less than 0.1");
+      }
+      if (price < promo_price) {
+        errorMessages.push("price cannot be less than the promo_price");
+      }
+      if (shipped_weight < 0.1) {
+        errorMessages.push("shipped_weight cannot be less than 0.1");
+      }
+      if (shipped_height < 1) {
+        errorMessages.push("shipped_heigth cannot be less than 1");
+      }
+      if (shipped_width < 1) {
+        errorMessages.push("shipped_width cannot be less than 1");
+      }
+      if (shipped_length < 1) {
+        errorMessages.push("shipped_length cannot be less than 1");
       }
       if (errorMessages.length > 0) {
         res.status(400).json({ errors: errorMessages });
