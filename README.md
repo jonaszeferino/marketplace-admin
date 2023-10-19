@@ -41,14 +41,6 @@ To get started with the Marketplace ADMIN project, follow these steps:
 
 This project is deployed using Vercel.
 
-## Contribution
-
-Contributions to this project are welcome. To contribute, please follow these guidelines:
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes.
-4. Create a pull request.
-
 ## Credits
 
 - Project maintained by Jonas Zeferino.
