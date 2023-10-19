@@ -4,14 +4,29 @@ import React, { useState } from "react";
 import Navbar from "../../components/Navbar";
 
 const Form = () => {
-  const [nome, setNome] = useState("");
-  const [ean, setEan] = useState("");
-  const [descricao, setDescricao] = useState("");
-  const [preco, setPreco] = useState("");
-  const [sku, setSku] = useState("");
+  interface Product {
+    name: string;
+    sku: string;
+    ean: string;
+    description: string;
+    price: number;
+    promo_price: number;
+    shipped_weight: number;
+    shipped_width: number;
+    shipped_length: number;
+    shipped_height: number;
+    page_title: string;
+    url_friendly: string;
+    meta_description: string;
+    meta_keywords: string;
+    tags: number;
+    parent_id: number;
+    child_id_1: number;
+    child_id_2: number;
+    child_id_3: number;
+  }
 
-  //novo estilo via objeto num estado apenas//
-  const [product, setProduct] = useState({
+  const [product, setProduct] = useState<Product>({
     name: "",
     sku: "",
     ean: "",
@@ -22,9 +37,18 @@ const Form = () => {
     shipped_width: 0,
     shipped_length: 0,
     shipped_height: 0,
+    page_title: "",
+    url_friendly: "",
+    meta_description: "",
+    meta_keywords: "",
+    tags: 0,
+    parent_id: 0,
+    child_id_1: 0,
+    child_id_2: 0,
+    child_id_3: 0,
   });
 
-  const handleFieldChange = (e) => {
+  const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
 
@@ -34,26 +58,22 @@ const Form = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(product);
   };
   //----ate aqui o acaba o novo-----//
 
   const [openCreate, setOpenCreate] = useState(false);
-
   const handleOpen = () => {
     setOpenCreate(!openCreate);
   };
   const [selectedOption, setSelectedOption] = useState<string>("");
-
-  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(event.target.value);
   };
-
   const [selectedOptionWithoutVariation, setSelectedOptionWithoutVariation] =
     useState("produto");
-
   const handleOptionChangeWithoutVariation = (option: string) => {
     setSelectedOptionWithoutVariation(option);
   };
@@ -362,91 +382,93 @@ const Form = () => {
                   </label>
                   <input
                     type="text"
-                    id="nome"
-                    name="nome"
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
+                    id="page_title"
+                    name="page_title"
+                    value={product.page_title}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
                 <div className="mb-4">
                   <label
-                    htmlFor="ean"
+                    htmlFor="meta_keywords"
                     className="block text-black font-semibold"
                   >
                     Meta-keywords:
                   </label>
                   <input
                     type="text"
-                    id="ean"
-                    name="ean"
-                    value={ean}
-                    onChange={(e) => setEan(e.target.value)}
+                    id="meta_keywords"
+                    name="meta_keywords"
+                    value={product.meta_keywords}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
                 <div className="mb-4">
                   <label
-                    htmlFor="descricao"
+                    htmlFor="meta_description"
                     className="block text-black font-semibold"
                   >
                     Meta-Description:
                   </label>
-                  <textarea
-                    id="descricao"
-                    name="descricao"
-                    value={descricao}
-                    onChange={(e) => setDescricao(e.target.value)}
+                  <input
+                    type="text"
+                    id="meta_description"
+                    name="meta_description"
+                    value={product.meta_description}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
 
                 <div className="mb-4">
                   <label
-                    htmlFor="preco"
+                    htmlFor="parent_id"
                     className="block text-black font-semibold"
                   >
                     Categoria Principal:
                   </label>
                   <input
-                    type="number"
-                    id="preco"
-                    name="preco"
-                    value={preco}
-                    onChange={(e) => setPreco(e.target.value)}
+                    type="text"
+                    id="parent_id"
+                    name="parent_id"
+                    value={product.parent_id}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
 
                 <div className="mb-4">
                   <label
-                    htmlFor="preco"
+                    htmlFor="child_id_1"
                     className="block text-black font-semibold"
                   >
                     Sub-Categorias:
                   </label>
+
                   <input
-                    type="number"
-                    id="preco"
-                    name="preco"
-                    value={preco}
-                    onChange={(e) => setPreco(e.target.value)}
+                    type="text"
+                    id="child_id_1"
+                    name="child_id_1"
+                    value={product.child_id_1}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
-                  <input
-                    type="number"
-                    id="preco"
-                    name="preco"
-                    value={preco}
-                    onChange={(e) => setPreco(e.target.value)}
+              <input
+                    type="text"
+                    id="child_id_2"
+                    name="child_id_2"
+                    value={product.child_id_2}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
-                  <input
-                    type="number"
-                    id="preco"
-                    name="preco"
-                    value={preco}
-                    onChange={(e) => setPreco(e.target.value)}
+                    <input
+                    type="child_id_3"
+                    id="child_id_3"
+                    name="child_id_3"
+                    value={product.child_id_3}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
@@ -458,11 +480,11 @@ const Form = () => {
                     Tags:
                   </label>
                   <input
-                    type="number"
-                    id="preco"
-                    name="preco"
-                    value={preco}
-                    onChange={(e) => setPreco(e.target.value)}
+                    type="text"
+                    id="tags"
+                    name="tags"
+                    value={product.tags}
+                    onChange={handleFieldChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
