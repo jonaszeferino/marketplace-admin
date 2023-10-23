@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 
 const Form = () => {
@@ -47,6 +47,28 @@ const Form = () => {
     child_id_2: 0,
     child_id_3: 0,
   });
+  const [parentCategories, setParentCategories] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/v2/getCategoryParent")
+      .then((response) => response.json())
+      .then((data) => {
+        setParentCategories(data);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar categorias:", error);
+      });
+  }, []);
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const fieldName = e.target.name;
+    const fieldValue = e.target.value;
+
+    setProduct({
+      ...product,
+      [fieldName]: fieldValue,
+    });
+  };
 
   const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fieldName = e.target.name;
@@ -63,7 +85,6 @@ const Form = () => {
     console.log(product);
   };
   //----ate aqui o acaba o novo-----//
-
   const [openCreate, setOpenCreate] = useState(false);
   const handleOpen = () => {
     setOpenCreate(!openCreate);
@@ -421,7 +442,6 @@ const Form = () => {
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
-
                 <div className="mb-4">
                   <label
                     htmlFor="parent_id"
@@ -429,66 +449,22 @@ const Form = () => {
                   >
                     Categoria Principal:
                   </label>
-                  <input
-                    type="text"
+                  <select
                     id="parent_id"
                     name="parent_id"
                     value={product.parent_id}
-                    onChange={handleFieldChange}
+                    onChange={handleSelectChange} // Usar o manipulador de eventos correto para o select
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <label
-                    htmlFor="child_id_1"
-                    className="block text-black font-semibold"
                   >
-                    Sub-Categorias:
-                  </label>
-
-                  <input
-                    type="text"
-                    id="child_id_1"
-                    name="child_id_1"
-                    value={product.child_id_1}
-                    onChange={handleFieldChange}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-              <input
-                    type="text"
-                    id="child_id_2"
-                    name="child_id_2"
-                    value={product.child_id_2}
-                    onChange={handleFieldChange}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-                    <input
-                    type="child_id_3"
-                    id="child_id_3"
-                    name="child_id_3"
-                    value={product.child_id_3}
-                    onChange={handleFieldChange}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-                  />
+                    <option value="">Selecione uma categoria principal</option>
+                    {parentCategories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="preco"
-                    className="block text-black font-semibold"
-                  >
-                    Tags:
-                  </label>
-                  <input
-                    type="text"
-                    id="tags"
-                    name="tags"
-                    value={product.tags}
-                    onChange={handleFieldChange}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-
+                {/* ...outros campos de entrada */}
                 <button
                   type="submit"
                   className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700"
